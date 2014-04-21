@@ -88,9 +88,12 @@ def read_imu():
 		quat1[i] = float(read_int16())/32767
 	
 	for i in range(3):
-		mag[i] = float(read_int16())
+		mag[i] = float(read_int16())/16
 	
-	mag = mag[[1,0,2]]
+	temp = mag[0]
+	mag[0] = mag[1]
+	mag[1] = -1*temp
+
 	return (quaternion_to_rmatrix(quat1), np.eye(3), mag)
 
 def read_int16():

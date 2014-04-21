@@ -1,18 +1,10 @@
-// SDA: AD4
+// SDA: A4
 // SCL: A5
 
-// Arduino:
-// Grey: GND
-// White: VCC
-// Purple: A5
-// Black: A4
-
-// IMUs:
-// Brown: VCC
-// Black: VCC
+// Black: GND
 // Purple: VCC
-// Yellow: GND
-
+// Grey: A4
+// White: A5
 
 #include "MPU6050.h"
 #include "Wire.h"
@@ -27,9 +19,11 @@ void setup() {
 
     Serial.begin(115200);
     
+    mpu.setI2CBypassEnabled(true);
     magn.init(false);
     magn.calibrate(1, 32);
     magn.setMode(0);
+    mpu.setI2CBypassEnabled(false);
     
     mpu.dmpInitialize();
 }
@@ -38,7 +32,10 @@ void setup() {
 void loop() 
 {
   Quaternion* q = mpu.readQuat();
+  
+  mpu.setI2CBypassEnabled(true);
   magn.getValues(&ix,&iy,&iz);
+  mpu.setI2CBypassEnabled(false);
   
   Serial.write(255);
   Serial.write(255);
@@ -46,9 +43,11 @@ void loop()
   write_int16(q->x*32767);
   write_int16(q->y*32767);
   write_int16(q->z*32767);
-  write_int16(ix);
-  write_int16(iy);
-  write_int16(iz);
+  write_int16(ix*16);
+  write_int16(iy*16);
+  write_int16(iz*16);
+
+//  Serial.println("");
 }
 
 void write_int16(int i)
@@ -56,6 +55,8 @@ void write_int16(int i)
   unsigned int ui = i + 32766;
   Serial.write(ui/256);
   Serial.write(ui%256);
+//  Serial.print(i);
+//  Serial.print(" ");
 }
 
 float q_array[4];
