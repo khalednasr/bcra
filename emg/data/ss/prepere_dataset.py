@@ -1,8 +1,8 @@
 import numpy as np
 
 num_patterns = 5
-window_size = 64
-window_increment = 32
+window_size = 16
+window_increment = 8
 
 def process_file(filename):
 	raw = np.loadtxt(filename)
@@ -37,6 +37,11 @@ def process_set(directory):
 
 training_data = process_set('raw/training')
 validation_data = process_set('raw/validation')
+
+print training_data[0].shape
+print training_data[1].shape
+print validation_data[0].shape
+print validation_data[1].shape
 
 np.save('Xtrain.npy', training_data[0])
 np.save('Ytrain.npy', training_data[1])
