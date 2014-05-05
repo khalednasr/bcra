@@ -54,11 +54,12 @@ def get_features(window):
     return features
 	
 def get_features_dataset(dataset,window_size):
+	dataset = dataset.T
 	dataset = dataset.reshape(-1,4,window_size)
 	features_list = []
 	for i in range(0,dataset.shape[0]):
 		for j in range(0,dataset.shape[1]):
 			features_list.append(get_features(dataset[i][j]))
 
-	return np.array(features_list).reshape(dataset.shape[0],-1)
+	return np.array(features_list).reshape(dataset.shape[0],-1).T
 	
