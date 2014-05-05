@@ -52,3 +52,13 @@ def get_features(window):
     features = [SKW(window)/1000.0,WL(window)/50000.0,RMS(window)/1000.0,
 				ZC(window)/1000.0,MAV(window)/1000000.0,SSC(window)/1000.0]
     return features
+	
+def get_features_dataset(dataset,window_size):
+	dataset = dataset.reshape(-1,4,window_size)
+	features_list = []
+	for i in range(0,dataset.shape[0]):
+		for j in range(0,dataset.shape[1]):
+			features_list.append(get_features(dataset[i][j]))
+
+	return np.array(features_list).reshape(dataset.shape[0],-1)
+	
