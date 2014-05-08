@@ -9,6 +9,9 @@ sampling_frequency = 400
 buffer_size = 400
 
 readings_queue = Queue.Queue()
+window_size = 16
+sliding_size = window_size/2
+processing_buffer = np.zeros(4,window_size)
 
 order = 2
 notch_filter = IIRFilter(order, [48, 52], 'stop', sampling_frequency)
@@ -17,6 +20,8 @@ band_filter = IIRFilter(order, [15, 200], 'pass', sampling_frequency)
 def processing_loop():
     while running:
         readings = readings_queue.get()
+		processing_buffer = np.roll(processing_buffer,-1,1)
+		processing_buffer[:, window_size-1] =  readings_queue.get()
         
         print readings_queue.qsize()
 
