@@ -1,7 +1,7 @@
 import numpy as np
 
 num_patterns = 5
-window_size = 16
+window_size = 64
 window_increment = 8
 
 def process_file(filename):
